@@ -60,3 +60,31 @@ export function createSubmission(tool_code, offset_um) {
     body: JSON.stringify({ tool_code, offset_um: Number(offset_um) }),
   });
 }
+
+// ---- 刀补连线台 ----
+
+export function fetchTrendPoints(limit) {
+  return request(`/trend/points?limit=${encodeURIComponent(limit)}`);
+}
+
+export function compareTrend({ limit, first_id, second_id }) {
+  return request("/trend/compare", {
+    method: "POST",
+    body: JSON.stringify({ limit, first_id, second_id }),
+  });
+}
+
+export function checkoutTrend({ limit, first_id = null, second_id = null }) {
+  return request("/trend/checkout", {
+    method: "POST",
+    body: JSON.stringify({ limit, first_id, second_id }),
+  });
+}
+
+export function fetchSnapshots() {
+  return request("/trend/snapshots");
+}
+
+export function fetchSnapshot(id) {
+  return request(`/trend/snapshots/${id}`);
+}

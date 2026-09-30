@@ -6,7 +6,12 @@ from ninja import NinjaAPI, Schema
 from ninja.errors import HttpError
 
 from desk.auth_utils import bearer_auth, create_access_token, verify_password
-from desk.models import OffsetSubmission, User
+from desk.models import OffsetSubmission, TrendSnapshot, User
+from desk.services import (
+    compare_points,
+    normalize_limit,
+    recent_settled_points,
+)
 
 api = NinjaAPI(title="数控刀补复核台", version="1.0")
 
@@ -106,3 +111,113 @@ def create_submission(request: HttpRequest, body: SubmissionIn):
         status=OffsetSubmission.Status.PENDING,
     )
     return _to_out(row)
+
+
+# ---------------------------------------------------------------------------
+# 刀补连线台
+# ---------------------------------------------------------------------------
+
+
+class TrendPointsOut(Schema):
+    limit: int
+    points: list
+
+
+class CompareIn(Schema):
+    limit: Optional[int] = None
+    first_id: int
+    second_id: int
+
+
+class CompareOut(Schema):
+    first_id: int
+    second_id: int
+    first_tool_code: str
+    second_tool_code: str
+    first_offset_um: int
+    second_offset_um: int
+    diff_um: int
+    abs_diff_um: int
+
+
+class CheckoutIn(Schema):
+    limit: Optional[int] = None
+    first_id: Optional[int] = None
+    second_id: Optional[int] = None
+
+
+class SnapshotOut(Schema):
+    id: int
+    limit: int
+    points: list
+    pair: Optional[dict]
+    checked_out_by: Optional[str]
+    checked_out_at: datetime
+
+
+def _snapshot_out(row: TrendSnapshot) -> SnapshotOut:
+    return SnapshotOut(
+        id=row.id,
+        limit=row.limit,
+        points=row.points,
+        pair=row.pair,
+        checked_out_by=row.checked_out_by.username if row.checked_out_by else None,
+        checked_out_at=row.checked_out_at,
+    )
+
+
+@api.get("/trend/points", response=TrendPointsOut, auth=bearer_auth)
+def trend_points(request: HttpRequest, limit: Optional[int] = None):
+    """近次结清点，顺序与首页复核列表（-created_at）一致。"""
+    lim = normalize_limit(limit)
+    return {"limit": lim, "points": recent_settled_points(lim)}
+
+
+@api.post("/trend/compare", response=CompareOut, auth=bearer_auth)
+def trend_compare(request: HttpRequest, body: CompareIn):
+    """挑两个点交给后台算差值；页面不得自行相减。"""
+    lim = normalize_limit(body.limit)
+    points = recent_settled_points(lim)
+    try:
+        return compare_points(points, body.first_id, body.second_id)
+    except ValueError as exc:
+        raise HttpError(400, str(exc))
+
+
+@api.post("/trend/checkout", response=SnapshotOut, auth=bearer_auth)
+def trend_checkout(request: HttpRequest, body: CheckoutIn):
+    """操作员签出只读副本：冻住当前点集连同差值。复核员无权签出。"""
+    user: User = request.auth
+    if not user.can_write:
+        raise HttpError(403, "仅操作员可签出连线台副本")
+    lim = normalize_limit(body.limit)
+    points = recent_settled_points(lim)
+    pair = None
+    if body.first_id is not None and body.second_id is not None:
+        try:
+            pair = compare_points(points, body.first_id, body.second_id)
+        except ValueError as exc:
+            raise HttpError(400, str(exc))
+    snapshot = TrendSnapshot.objects.create(
+        limit=lim,
+        points=points,
+        pair=pair,
+        checked_out_by=user,
+    )
+    return _snapshot_out(snapshot)
+
+
+@api.get("/trend/snapshots", response=list[SnapshotOut], auth=bearer_auth)
+def list_snapshots(request: HttpRequest):
+    """已签出区：在线轨迹与既有副本两边都可看。"""
+    rows = TrendSnapshot.objects.select_related("checked_out_by").all()[:50]
+    return [_snapshot_out(r) for r in rows]
+
+
+@api.get("/trend/snapshots/{snapshot_id}", response=SnapshotOut, auth=bearer_auth)
+def get_snapshot(request: HttpRequest, snapshot_id: int):
+    try:
+        row = TrendSnapshot.objects.select_related("checked_out_by").get(pk=snapshot_id)
+    except TrendSnapshot.DoesNotExist:
+        raise HttpError(404, "签出副本不存在")
+    return _snapshot_out(row)

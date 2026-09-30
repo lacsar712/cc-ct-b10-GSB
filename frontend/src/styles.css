@@ -143,3 +143,176 @@ td {
   color: #b91c1c;
   font-weight: 600;
 }
+
+.muted {
+  color: #5a6478;
+}
+
+/* ---------- 刀补连线台 ---------- */
+
+.block-title {
+  margin: 1.25rem 0 0.25rem;
+  font-size: 1rem;
+}
+
+.limit-select {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.limit-select button {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.88rem;
+}
+
+.chart-wrap {
+  position: relative;
+  margin-top: 0.75rem;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+  font-size: 0.88rem;
+  color: #5a6478;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.trend-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.chart-tip {
+  position: absolute;
+  top: 12px;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid #d5dce6;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  padding: 0.5rem 0.7rem;
+  display: grid;
+  gap: 0.15rem;
+  font-size: 0.85rem;
+  min-width: 150px;
+}
+
+.chart-tip .tip-time {
+  color: #5a6478;
+  font-size: 0.78rem;
+}
+
+.point-table,
+.snapshot-table {
+  font-variant-numeric: tabular-nums;
+}
+
+tr.row-picked {
+  background: #eef5ff;
+}
+
+tr.row-picked td {
+  border-bottom-color: #bcd3f5;
+}
+
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.9rem;
+}
+
+.diff-box {
+  margin-top: 0.9rem;
+  border: 1px solid #d5dce6;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  display: grid;
+  gap: 0.4rem;
+  background: #fafbfd;
+}
+
+.diff-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.diff-tag {
+  font-size: 0.78rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  color: #fff;
+}
+
+.tag-a {
+  background: #2a78d6;
+}
+
+.tag-b {
+  background: #6da7ec;
+}
+
+.diff-arrow {
+  color: #898781;
+  padding-left: 1.4rem;
+}
+
+.diff-result {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  border-top: 1px dashed #d5dce6;
+  padding-top: 0.5rem;
+  margin-top: 0.15rem;
+  font-size: 0.95rem;
+}
+
+.diff-result strong {
+  font-size: 1.15rem;
+}
+
+.diff-num {
+  color: #1c5cab;
+}
+
+.link-btn {
+  color: #1e3a8a;
+  text-decoration: none;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  background: #e8edf5;
+  font-size: 0.88rem;
+  display: inline-block;
+}
+
+.banner.ok {
+  background: #dcfce7;
+  color: #166534;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.freeze-banner {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  font-size: 0.92rem;
+}

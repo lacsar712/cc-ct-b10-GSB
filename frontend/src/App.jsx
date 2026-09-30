@@ -8,6 +8,7 @@ import {
   login,
   setSession,
 } from "./api";
+import { SnapshotView, TrendDesk } from "./TrendPage";
 
 const statusLabel = {
   pending: "待复核",
@@ -22,8 +23,11 @@ const roleLabel = {
 
 function readHash() {
   const raw = (location.hash || "#/").replace(/^#/, "") || "/";
-  const m = raw.match(/^\/detail\/(\d+)/);
+  let m = raw.match(/^\/detail\/(\d+)/);
   if (m) return { name: "detail", id: Number(m[1]) };
+  m = raw.match(/^\/snapshot\/(\d+)/);
+  if (m) return { name: "snapshot", id: Number(m[1]) };
+  if (raw === "/trend" || raw.startsWith("/trend")) return { name: "trend", id: null };
   return { name: "home", id: null };
 }
 
@@ -149,6 +153,16 @@ function App() {
               }}
             >
               复核总览
+            </a>
+            <a
+              href="#/trend"
+              class={route().name === "trend" || route().name === "snapshot" ? "active" : ""}
+              onClick={(e) => {
+                e.preventDefault();
+                location.hash = "#/trend";
+              }}
+            >
+              刀补连线台
             </a>
           </nav>
         </Show>
@@ -294,6 +308,13 @@ function App() {
               )}
             </Show>
           </section>
+        </Show>
+        <Show when={route().name === "snapshot"}>
+          <SnapshotView id={route().id} />
+        </Show>
+
+        <Show when={route().name === "trend"}>
+          <TrendDesk user={user()} />
         </Show>
       </Show>
     </div>

@@ -53,7 +53,32 @@ class OffsetSubmission(models.Model):
     reviewed_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
-        ordering = ["-created_at"]
+        ordering = ["-created_at", "-id"]
 
     def __str__(self) -> str:
         return f"{self.tool_code} {self.offset_um}µm"
+
+
+class TrendSnapshot(models.Model):
+    """签出副本：冻结签出时刻的近次结清点集与后台计算的差值。
+
+    副本一经创建即只读，后续新判定/新投笔只影响在线轨迹，不改动既有副本。
+    """
+
+    limit = models.IntegerField()
+    points = models.JSONField(default=list)
+    pair = models.JSONField(null=True, blank=True)
+    checked_out_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="trend_snapshots",
+    )
+    checked_out_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-checked_out_at"]
+
+    def __str__(self) -> str:
+        return f"连线台签出 #{self.id}（近 {self.limit} 次）"
