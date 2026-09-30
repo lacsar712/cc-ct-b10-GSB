@@ -140,6 +140,280 @@ td {
 }
 
 .fail {
-  color: #b91c1c;
+  color: #c2410c;
   font-weight: 600;
+}
+
+/* ---- 在线连线台 ---- */
+
+.toolbar.wrap {
+  flex-wrap: wrap;
+}
+
+.limit-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.diff-bar {
+  margin-top: 0.75rem;
+}
+
+.readonly-tag {
+  color: #5a6478;
+  font-size: 0.9rem;
+  background: #e8edf5;
+  padding: 0.45rem 0.8rem;
+  border-radius: 6px;
+}
+
+.chart-wrap {
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.trend-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.band {
+  fill: #15803d;
+  opacity: 0.07;
+}
+
+.band-edge {
+  stroke: #15803d;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  opacity: 0.45;
+}
+
+.band-label {
+  fill: #15803d;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.grid-line {
+  stroke: #e5e9f0;
+  stroke-width: 1;
+}
+
+.zero-line {
+  stroke: #b6c0cd;
+  stroke-width: 1;
+}
+
+.axis-label {
+  fill: #5a6478;
+  font-size: 11px;
+}
+
+.trend-line {
+  stroke: #2563eb;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.marker {
+  transition: r 0.12s ease;
+}
+
+.marker.picked {
+  stroke: #1e3a8a;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 3px rgba(37, 99, 235, 0.55));
+}
+
+.crosshair {
+  stroke: #5a6478;
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  pointer-events: none;
+}
+
+.chart-tip {
+  position: absolute;
+  top: 6px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  background: rgba(26, 35, 50, 0.92);
+  color: #fff;
+  font-size: 0.82rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.chart-tip .pass {
+  color: #86efac;
+}
+
+.chart-tip .fail {
+  color: #fdba74;
+}
+
+.chart-tip .tip-time {
+  color: #c3cad6;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: #5a6478;
+}
+
+.chart-legend i {
+  display: inline-block;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+.lg-line {
+  width: 18px;
+  height: 0;
+  border-top: 2px solid #2563eb;
+}
+
+.lg-pass {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #15803d;
+}
+
+.lg-fail {
+  width: 9px;
+  height: 9px;
+  background: #c2410c;
+  transform: rotate(45deg);
+}
+
+.pair-card {
+  border: 1px solid #d7deea;
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  background: #f8fafc;
+}
+
+.pair-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pair-head h3 {
+  margin: 0;
+}
+
+.pair-points {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.6rem 0;
+  flex-wrap: wrap;
+}
+
+.pair-point {
+  display: grid;
+  gap: 0.15rem;
+  background: #fff;
+  border: 1px solid #e5e9f0;
+  border-radius: 8px;
+  padding: 0.55rem 0.8rem;
+  min-width: 200px;
+}
+
+.pair-arrow {
+  font-size: 1.3rem;
+  color: #5a6478;
+}
+
+.tag {
+  display: inline-block;
+  width: 1.6em;
+  height: 1.6em;
+  line-height: 1.6em;
+  text-align: center;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.8rem;
+}
+
+.tag.jia {
+  background: #1e3a8a;
+}
+
+.tag.yi {
+  background: #0f766e;
+}
+
+.pair-math {
+  margin: 0.4rem 0 0;
+}
+
+.frozen-note {
+  margin: 0.4rem 0 0;
+  color: #9a3412;
+  font-size: 0.88rem;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  border: 1px solid currentColor;
+}
+
+.chip.pass {
+  background: #f0fdf4;
+}
+
+.chip.fail {
+  background: #fff7ed;
+}
+
+.link-btn {
+  color: #1e3a8a;
+  text-decoration: none;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  background: #e8edf5;
+  font-size: 0.9rem;
+}
+
+.frozen-banner {
+  margin: 0.75rem 0;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #7c2d12;
+}
+
+.frozen-banner .hint {
+  margin-top: 0.25rem;
+}
+
+.subhead {
+  margin-top: 1.1rem;
 }

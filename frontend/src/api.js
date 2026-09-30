@@ -60,3 +60,36 @@ export function createSubmission(tool_code, offset_um) {
     body: JSON.stringify({ tool_code, offset_um: Number(offset_um) }),
   });
 }
+
+// ---- 在线连线台 ----
+
+export function fetchTrackPoints(limit) {
+  return request(`/track/points?limit=${encodeURIComponent(limit)}`);
+}
+
+// 差值只能由后台算，页面只交两个点 id
+export function fetchPairDiff(firstId, secondId) {
+  return request("/track/diff", {
+    method: "POST",
+    body: JSON.stringify({ first_id: firstId, second_id: secondId }),
+  });
+}
+
+export function fetchCheckouts() {
+  return request("/checkouts");
+}
+
+export function fetchCheckout(id) {
+  return request(`/checkouts/${id}`);
+}
+
+export function createCheckout({ limit, firstId, secondId }) {
+  return request("/checkouts", {
+    method: "POST",
+    body: JSON.stringify({
+      limit,
+      first_id: firstId ?? null,
+      second_id: secondId ?? null,
+    }),
+  });
+}

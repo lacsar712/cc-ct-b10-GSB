@@ -8,6 +8,7 @@ import {
   login,
   setSession,
 } from "./api";
+import { TrackView, CheckoutView } from "./Track";
 
 const statusLabel = {
   pending: "待复核",
@@ -22,8 +23,11 @@ const roleLabel = {
 
 function readHash() {
   const raw = (location.hash || "#/").replace(/^#/, "") || "/";
-  const m = raw.match(/^\/detail\/(\d+)/);
+  let m = raw.match(/^\/detail\/(\d+)/);
   if (m) return { name: "detail", id: Number(m[1]) };
+  m = raw.match(/^\/checkout\/(\d+)/);
+  if (m) return { name: "checkout", id: Number(m[1]) };
+  if (raw.startsWith("/track")) return { name: "track", id: null };
   return { name: "home", id: null };
 }
 
@@ -80,7 +84,7 @@ function App() {
     window.addEventListener("hashchange", onHash);
     if (user()) {
       if (route().name === "detail") loadDetail(route().id);
-      else loadRows();
+      else if (route().name === "home") loadRows();
     }
     return () => window.removeEventListener("hashchange", onHash);
   });
@@ -149,6 +153,16 @@ function App() {
               }}
             >
               复核总览
+            </a>
+            <a
+              href="#/track"
+              class={route().name === "track" || route().name === "checkout" ? "active" : ""}
+              onClick={(e) => {
+                e.preventDefault();
+                location.hash = "#/track";
+              }}
+            >
+              在线连线台
             </a>
           </nav>
         </Show>
@@ -294,6 +308,14 @@ function App() {
               )}
             </Show>
           </section>
+        </Show>
+
+        <Show when={route().name === "track"}>
+          <TrackView user={user()} />
+        </Show>
+
+        <Show when={route().name === "checkout"}>
+          <CheckoutView id={route().id} />
         </Show>
       </Show>
     </div>
